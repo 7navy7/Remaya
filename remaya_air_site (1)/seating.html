@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="auth.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select Your Seat - Remaya Air</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #fca37d;
+      --secondary: #d66767;
+      --accent: #7e4cc2;
+      --success: #2ca886;
+      --warning: #ffc785;
+      --dark: #333;
+      --light: #fefaf6;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--light);
+      color: var(--dark);
+      line-height: 1.6;
+    }
+    
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: var(--dark);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .logo {
+      height: 50px;
+    }
+    
+    .site-name {
+      font-weight: 700;
+      font-size: 1.8rem;
+      margin: 0;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 20px;
+    }
+    
+    .page-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+    
+    .page-title:after {
+      content: "";
+      display: block;
+      width: 80px;
+      height: 4px;
+      background: var(--secondary);
+      margin: 10px auto;
+      border-radius: 2px;
+    }
+    
+    .airplane-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      margin-bottom: 2rem;
+    }
+    
+    .seat-map {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      width: 100%;
+      padding: 2rem;
+    }
+    
+    .seat {
+      width: 60px;
+      height: 60px;
+      background: var(--light);
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 2px solid rgba(0,0,0,0.1);
+    }
+    
+    .seat:hover {
+      transform: scale(1.05);
+    }
+    
+    .seat.selected {
+      background: var(--success);
+      color: white;
+    }
+    
+    .seat.occupied {
+      background: #f0e6ff;
+      color: #b39ddb;
+      cursor: not-allowed;
+    }
+    
+    .seat.premium {
+      background: var(--warning);
+      border: 2px solid var(--secondary);
+    }
+    
+    .seat.emergency-exit {
+      background: var(--accent);
+      color: white;
+    }
+    
+    .aisle {
+      grid-column: span 3;
+      height: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+    }
+    
+    .selected-seat-display {
+      background: white;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 2rem auto;
+      text-align: center;
+      max-width: 500px;
+    }
+    
+    .seat-number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--success);
+      margin: 1rem 0;
+    }
+    
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 2rem;
+    }
+    
+    .btn {
+      padding: 12px 30px;
+      border-radius: 30px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(to right, var(--secondary), var(--accent));
+      color: white;
+    }
+    
+    .seat-error {
+      color: #d66767;
+      font-size: 0.9rem;
+      margin-top: 10px;
+      text-align: center;
+    }
+    
+    .seat-price {
+      font-size: 0.7rem;
+      margin-top: 3px;
+    }
+    
+    @media (max-width: 768px) {
+      .seat {
+        width: 50px;
+        height: 50px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="home-en.html">
+      <img src="logo.png" alt="Remaya Air Logo" class="logo">
+    </a>
+    <h1 class="site-name">Remaya Air</h1>
+  </header>
+  
+  <div class="container">
+    <h1 class="page-title">Select Your Seats</h1>
+    
+    <div class="airplane-container">
+      <div class="seat-map" id="seatMap">
+        <!-- Seats will be generated here -->
+      </div>
+      
+      <div class="selected-seat-display" id="selectedSeatDisplay" style="display: none;">
+        <h3>Your Selected Seats</h3>
+        <div class="seat-number" id="selectedSeatNumbers"></div>
+        <div id="seatChargesDisplay"></div>
+        <div class="action-buttons">
+          <button class="btn" onclick="cancelSelection()">
+            <i class="fas fa-times"></i> Cancel
+          </button>
+          <button class="btn btn-primary" onclick="proceedToPayment()">
+            <i class="fas fa-arrow-right"></i> Continue to Payment
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Load booking data
+    const bookingData = JSON.parse(localStorage.getItem('bookingData')) || {};
+    const totalPassengers = (parseInt(bookingData.adults) || 1) + (parseInt(bookingData.children) || 0);
+    
+    // Seat configuration
+    const seats = [
+      { id: '1A', type: 'Standard', price: 0 },
+      { id: '1B', type: 'Standard', price: 0 },
+      { id: '1C', type: 'Premium', price: 49 },
+      { id: '2A', type: 'Standard', price: 0 },
+      { id: '2B', type: 'Standard', price: 0 },
+      { id: '2C', type: 'Premium', price: 49 },
+      { id: '3A', type: 'Standard', price: 0 },
+      { id: '3B', type: 'Standard', price: 0 },
+      { id: '3C', type: 'Emergency Exit', price: 29 },
+      { id: '4A', type: 'Standard', price: 0 },
+      { id: '4B', type: 'Standard', price: 0 },
+      { id: '4C', type: 'Premium', price: 49 },
+      { id: '5A', type: 'Standard', price: 0 },
+      { id: '5B', type: 'Standard', price: 0 },
+      { id: '5C', type: 'Emergency Exit', price: 29 }
+    ];
+    
+    // Occupied seats (randomly generated for demo)
+    const occupiedSeats = ['1A', '2B', '3C'];
+    
+    let selectedSeats = [];
+    const seatMap = document.getElementById('seatMap');
+    const selectedSeatDisplay = document.getElementById('selectedSeatDisplay');
+    const selectedSeatNumbers = document.getElementById('selectedSeatNumbers');
+    const seatChargesDisplay = document.getElementById('seatChargesDisplay');
+    
+    // Initialize seat map
+    function initializeSeatMap() {
+      seatMap.innerHTML = '';
+      
+      seats.forEach((seat, index) => {
+        const seatElement = document.createElement('div');
+        seatElement.className = 'seat';
+        
+        const seatNumber = document.createElement('div');
+        seatNumber.textContent = seat.id;
+        seatElement.appendChild(seatNumber);
+        
+        if (seat.price > 0) {
+          const seatPrice = document.createElement('div');
+          seatPrice.className = 'seat-price';
+          seatPrice.textContent = `+SAR${seat.price}`;
+          seatElement.appendChild(seatPrice);
+        }
+        
+        // Apply seat type
+        if (seat.type === 'Premium') {
+          seatElement.classList.add('premium');
+        } else if (seat.type === 'Emergency Exit') {
+          seatElement.classList.add('emergency-exit');
+        }
+        
+        // Mark occupied seats
+        if (occupiedSeats.includes(seat.id)) {
+          seatElement.classList.add('occupied');
+        }
+        
+        seatElement.addEventListener('click', () => selectSeat(seat, seatElement));
+        seatMap.appendChild(seatElement);
+        
+        // Add aisle after each row
+        if ((index + 1) % 3 === 0 && index !== seats.length - 1) {
+          const aisle = document.createElement('div');
+          aisle.className = 'aisle';
+          aisle.textContent = `Row ${seat.id.charAt(0)}`;
+          seatMap.appendChild(aisle);
+        }
+      });
+    }
+    
+    // Handle seat selection
+    function selectSeat(seat, element) {
+      if (element.classList.contains('occupied')) {
+        showSeatError('This seat is already occupied');
+        return;
+      }
+      
+      const index = selectedSeats.findIndex(s => s.id === seat.id);
+      
+      if (index === -1) {
+        if (selectedSeats.length >= totalPassengers) {
+          showSeatError(`You can only select ${totalPassengers} seat(s) for your booking.`);
+          return;
+        }
+        selectedSeats.push(seat);
+        element.classList.add('selected');
+      } else {
+        selectedSeats.splice(index, 1);
+        element.classList.remove('selected');
+      }
+      
+      updateSelectedSeatsDisplay();
+    }
+    
+    // Update selected seats display
+    function updateSelectedSeatsDisplay() {
+      if (selectedSeats.length > 0) {
+        selectedSeatNumbers.innerHTML = selectedSeats.map(seat => 
+          `<span style="display: inline-block; margin: 5px; padding: 5px 10px; background: var(--success); color: white; border-radius: 5px;">${seat.id}</span>`
+        ).join('');
+        
+        const totalCharges = selectedSeats.reduce((sum, seat) => sum + seat.price, 0);
+        if (totalCharges > 0) {
+          seatChargesDisplay.innerHTML = `<p>Additional seat charges: <strong>SAR${totalCharges}</strong></p>`;
+        } else {
+          seatChargesDisplay.innerHTML = '';
+        }
+        
+        selectedSeatDisplay.style.display = 'block';
+      } else {
+        selectedSeatDisplay.style.display = 'none';
+      }
+    }
+    
+    // Show seat error message
+    function showSeatError(message) {
+      const errorElement = document.createElement('div');
+      errorElement.className = 'seat-error';
+      errorElement.textContent = message;
+      
+      const existingError = document.querySelector('.seat-error');
+      if (existingError) {
+        existingError.replaceWith(errorElement);
+      } else {
+        seatMap.parentNode.insertBefore(errorElement, seatMap.nextSibling);
+      }
+    }
+    
+    // Cancel selection
+    function cancelSelection() {
+      selectedSeats.forEach(seat => {
+        const seatElement = [...seatMap.children].find(el => 
+          el.textContent.includes(seat.id) && el.classList.contains('seat')
+        );
+        if (seatElement) seatElement.classList.remove('selected');
+      });
+      selectedSeats = [];
+      updateSelectedSeatsDisplay();
+      document.querySelector('.seat-error')?.remove();
+    }
+    
+    // Proceed to payment
+    function proceedToPayment() {
+      // Save selected seats to booking data
+      bookingData.selectedSeats = selectedSeats.map(seat => seat.id);
+      
+      // Calculate additional seat charges
+      const seatCharges = selectedSeats.reduce((total, seat) => total + seat.price, 0);
+      bookingData.seatCharges = seatCharges;
+      
+      localStorage.setItem('bookingData', JSON.stringify(bookingData));
+      
+      // Redirect to payment page
+      window.location.href = 'payment.html';
+    }
+    
+    // Initialize the seat map when page loads
+    window.onload = initializeSeatMap;
+  </script>
+</body>
+</html>

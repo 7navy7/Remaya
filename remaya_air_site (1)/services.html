@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="auth.js"></script>
+  <meta charset="UTF-8">
+  <title>Our Services - Remaya Air</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Improved side menu styles */
+    .side-menu {
+      display: none;
+      position: absolute;
+      top: 70px;
+      right: 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      padding: 15px 0;
+      width: 220px;
+      z-index: 1000;
+      border: none;
+    }
+    
+    .side-menu ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .side-menu ul li {
+      margin: 0;
+      transition: all 0.3s ease;
+    }
+    
+    .side-menu ul li a {
+      display: block;
+      padding: 12px 20px;
+      color: #555;
+      text-decoration: none;
+      font-size: 16px;
+      transition: all 0.2s;
+    }
+    
+    .side-menu ul li:hover {
+      background-color: #fefaf6;
+    }
+    
+    .side-menu ul li a:hover {
+      color: #d66767;
+      padding-left: 25px;
+    }
+    
+    .side-menu.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Services page styles */
+    .services-main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .intro-section {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .divider {
+      border-top: 1px solid #d66767;
+      margin: 30px 0;
+      text-align: center;
+    }
+    .divider span {
+      background: #fefaf6;
+      padding: 0 15px;
+      color: #d66767;
+      position: relative;
+      top: -12px;
+    }
+    .service-card {
+      background: white;
+      border-radius: 8px;
+      padding: 25px;
+      margin-bottom: 25px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    }
+    .service-card h3 {
+      color: #d66767;
+      margin-top: 0;
+      font-size: 1.5rem;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 10px;
+    }
+    .service-card p {
+      color: #555;
+      line-height: 1.6;
+    }
+    .service-btn {
+      background: linear-gradient(to right, #fca37d, #d66767);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-top: 15px;
+      display: inline-block;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    .service-btn:hover {
+      background: linear-gradient(to right, #d66767, #c55a5a);
+      box-shadow: 0 2px 8px rgba(214, 103, 103, 0.4);
+    }
+    strong {
+      color: #d66767;
+    }
+    h2 {
+      color: #d66767;
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 768px) {
+      .service-card {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="home-en.html">
+      <img src="logo.png" alt="Remaya Air Logo" class="logo">
+    </a>
+    <h1 class="site-name">Remaya Air</h1>
+    <nav>
+   
+      <div class="menu-btn" onclick="toggleMenu()">☰</div>
+    </nav>
+  </header>
+
+  <div class="side-menu" id="sideMenu">
+    <ul>
+      <li><a href="signup.html">Sign Up / Login</a></li>
+      <li><a href="settings.html">Settings</a></li>
+      <li><a href="map.html">Interactive Map</a></li>
+      <li><a href="about.html">About Us</a></li>
+    </ul>
+  </div>
+
+  <main class="services-main">
+    <div class="intro-section">
+      <h2>Our Exclusive Services</h2>
+      <p>Discover the premium services that make Remaya Air the preferred choice for discerning travelers</p>
+    </div>
+
+    <div class="divider"><span>Premium Offerings</span></div>
+
+    <div class="service-card">
+      <h3>In-Flight Catering</h3>
+      <p>Gourmet meals prepared by world-class chefs with options for all dietary requirements. Pre-order your meal 24 hours before your flight to ensure your preferred selection.</p>
+      <ul class="service-desc">
+        <li>Special dietary meals available (gluten-free, vegan, etc.)</li>
+        <li>Curated wine pairing with premium selections</li>
+        <li>24-hour advance ordering for personalized meals</li>
+      </ul>
+      <a href="catering.html" class="service-btn">Pre-order Now</a>
+    </div>
+
+    <div class="service-card">
+      <h3>Luxury Transportation</h3>
+      <p>Premium chauffeur services to and from the airport in luxury vehicles. <strong>Now available complimentary for business class passengers!</strong></p>
+      <ul class="service-desc">
+        <li>Mercedes-Benz, BMW, and Audi fleet</li>
+        <li>Meet-and-greet service at baggage claim</li>
+        <li>Complimentary bottled water and WiFi</li>
+      </ul>
+      <a href="transportation.html" class="service-btn">View Vehicles</a>
+    </div>
+
+    <div class="service-card">
+      <h3>Infant Care & Playroom</h3>
+      <p>In-flight infant care service including a safe and fun playroom for babies and toddlers. <strong>Note:</strong> This premium service costs double the regular fare.</p>
+      <ul class="service-desc">
+        <li>Certified child care professionals</li>
+        <li>Dedicated play area with age-appropriate toys</li>
+        <li>Private nursing and feeding stations</li>
+      </ul>
+      <a href="baby.html" class="service-btn">View Details</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-links">
+      <a href="about.html">About</a> | <a href="services.html">Services</a> | <a href="contact.html">Contact</a>
+    </div>
+    <p>© 2025 Remaya Air. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById("sideMenu").classList.toggle("active");
+    }
+  </script>
+</body>
+</html>

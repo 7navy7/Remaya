@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="auth.js"></script>
+  <meta charset="UTF-8">
+  <title>Book Your Private Flight - Remaya Air</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .booking-form { max-width: 800px; margin: 0 auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .form-group { margin-bottom: 20px; }
+    label { display: block; margin-bottom: 5px; font-weight: bold; }
+    select, input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+    .trip-type { display: flex; gap: 20px; }
+    .passenger-count { display: flex; gap: 15px; }
+    .price-summary { background: #f9f9f9; padding: 15px; border-radius: 5px; margin-top: 20px; }
+    .submit-btn { background: linear-gradient(to right, #fca37d, #d66767); color: white; border: none; padding: 12px 24px; border-radius: 30px; cursor: pointer; font-size: 16px; margin-top: 20px; }
+    .error-message { color: red; display: none; }
+    .locked-field { background-color: #f5f5f5; }
+    #returnDateGroup { display: none; margin-top: 15px; }
+    #departureDate { margin-bottom: 15px; }
+    .time-slots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+    .time-slot { padding: 8px; border: 1px solid #ddd; border-radius: 5px; text-align: center; cursor: pointer; }
+    .time-slot.selected { background-color: #fca37d; color: white; border-color: #d66767; }
+    .seat-info { margin-top: 10px; font-size: 0.9em; color: #666; }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="logo.png" alt="Remaya Air Logo" class="logo">
+    <h1 class="site-name">Remaya Air</h1>
+    <nav>
+      <div class="menu-btn" onclick="toggleMenu()">☰</div>
+    </nav>
+  </header>
+
+  <div class="side-menu" id="sideMenu">
+    <ul>
+      <li><a href="signup.html">Sign Up / Login</a></li>
+      <li><a href="settings.html">Settings</a></li>
+      <li><a href="map.html">Interactive Map</a></li>
+      <li><a href="about.html">About Us</a></li>
+    </ul>
+  </div>
+
+  <main>
+    <div class="booking-form">
+      <h2>Book Your Private Jet</h2>
+      
+      <div class="form-group">
+        <label>Trip Type</label>
+        <div class="trip-type">
+          <label><input type="radio" name="tripType" value="oneway" checked> One Way</label>
+          <label><input type="radio" name="tripType" value="roundtrip"> Round Trip</label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>From</label>
+        <input type="text" id="fromCity" class="locked-field" readonly>
+      </div>
+
+      <div class="form-group">
+        <label>To</label>
+        <input type="text" id="toCity" class="locked-field" readonly>
+      </div>
+
+      <div class="form-group">
+        <label>Departure Date</label>
+        <input type="date" id="departureDate" required>
+      </div>
+
+      <div class="form-group">
+        <label>Departure Time</label>
+        <div class="time-slots">
+          <div class="time-slot" data-time="08:00">8:00 AM</div>
+          <div class="time-slot" data-time="12:00">12:00 PM</div>
+          <div class="time-slot" data-time="16:00">4:00 PM</div>
+          <div class="time-slot" data-time="20:00">8:00 PM</div>
+          <div class="time-slot" data-time="00:00">12:00 AM</div>
+          <div class="time-slot" data-time="04:00">4:00 AM</div>
+        </div>
+        <input type="hidden" id="selectedTime" required>
+      </div>
+
+      <div class="form-group" id="returnDateGroup">
+        <label>Return Date</label>
+        <input type="date" id="returnDate">
+      </div>
+
+      <div class="form-group">
+        <label>Passengers</label>
+        <div class="passenger-count">
+          <div>
+            <label>Adults</label>
+            <input type="number" min="1" value="1" id="adults">
+          </div>
+          <div>
+            <label>Children (2-11)</label>
+            <input type="number" min="0" value="0" id="children">
+          </div>
+          <div>
+            <label>Infants (under 2)</label>
+            <input type="number" min="0" value="0" id="infants">
+          </div>
+        </div>
+        <p class="seat-info"> capacity: 15 seats maximum (including infants)</p>
+      </div>
+
+      <div class="price-summary">
+        <h3>Price Summary</h3>
+        <p>Base Fare: <span id="baseFare">0 SAR</span></p>
+        <p>Taxes & Fees: <span id="taxes">0 SAR</span></p>
+        <p>Total: <span id="totalPrice">0 SAR</span> (including VAT)</p>
+      </div>
+
+      <div class="error-message" id="errorMessage">
+        Please fill all required fields correctly.
+      </div>
+
+      <!-- Change the button onclick -->
+<button class="submit-btn" onclick="validateBooking()">Continue Booking</button>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-links">
+      <a href="about.html">About</a> | <a href="services.html">Services</a> | <a href="contact.html">Contact</a>
+    </div>
+    <p>© 2025 Remaya Air. All rights reserved.</p>
+  </footer>
+  <script>
+    const cityDistances = {
+      "Riyadh": {
+        "Jeddah": 850,
+        "Dubai": 950,
+        "Abu Dhabi": 1000,
+        "Doha": 650
+      },
+      "Jeddah": {
+        "Riyadh": 850,
+        "Dubai": 1700,
+        "Cairo": 1200
+      }
+    };
+
+    const MAX_SEATS = 15;
+    const BASE_PRICE_PER_KM = 10;
+
+    function toggleMenu() {
+      document.getElementById("sideMenu").classList.toggle("active");
+    }
+
+    function getUserData() {
+      const user = JSON.parse(localStorage.getItem('currentUser'));
+      const users = JSON.parse(localStorage.getItem('users'));
+      const userData = users.find(u => u.email === user?.email);
+      return userData || { city: 'Riyadh' };
+    }
+
+    function calculateDistance(from, to) {
+      return cityDistances[from]?.[to] || cityDistances[to]?.[from] || Math.floor(Math.random() * 3000) + 500;
+    }
+
+    function updatePassengerLimits() {
+      const adults = parseInt(document.getElementById('adults').value) || 0;
+      const childrenInput = document.getElementById('children');
+      const infantsInput = document.getElementById('infants');
+      const remainingSeats = MAX_SEATS - adults;
+
+      const maxChildren = Math.min(remainingSeats, 14);
+      const maxInfants = Math.min(remainingSeats, 14);
+
+      childrenInput.max = maxChildren;
+      infantsInput.max = maxInfants;
+
+      if (parseInt(childrenInput.value) > childrenInput.max) {
+        childrenInput.value = childrenInput.max;
+      }
+      if (parseInt(infantsInput.value) > infantsInput.max) {
+        infantsInput.value = infantsInput.max;
+      }
+    }
+
+    function calculatePrice() {
+      const fromCity = document.getElementById('fromCity').value;
+      const toCity = document.getElementById('toCity').value;
+      const distance = calculateDistance(fromCity, toCity);
+      const adults = parseInt(document.getElementById('adults').value) || 0;
+      const children = parseInt(document.getElementById('children').value) || 0;
+      const isRoundTrip = document.querySelector('input[name="tripType"]:checked').value === 'roundtrip';
+
+      const baseFare = distance * BASE_PRICE_PER_KM;
+      const totalPassengers = adults + children;
+      const totalFare = baseFare * totalPassengers;
+      const taxes = totalFare * 0.15; // 15% VAT
+
+      document.getElementById('baseFare').textContent = `${totalFare} SAR`;
+      document.getElementById('taxes').textContent = `${taxes} SAR`;
+
+      if (isRoundTrip) {
+        document.getElementById('totalPrice').textContent = `${(totalFare + taxes) * 2} SAR`;
+      } else {
+        document.getElementById('totalPrice').textContent = `${totalFare + taxes} SAR`;
+      }
+    }
+
+    function validateBooking() {
+      const departureDate = document.getElementById('departureDate').value;
+      const selectedTime = document.getElementById('selectedTime').value;
+      const fromCity = document.getElementById('fromCity').value;
+      const toCity = document.getElementById('toCity').value;
+      const returnDate = document.getElementById('returnDate').value;
+      const adults = document.getElementById('adults').value;
+      const children = document.getElementById('children').value;
+      const infants = document.getElementById('infants').value;
+      const tripType = document.querySelector('input[name="tripType"]:checked').value;
+      const totalPrice = document.getElementById('totalPrice').textContent;
+
+      if (!departureDate || !selectedTime || !adults || !fromCity || !toCity) {
+        document.getElementById('errorMessage').style.display = 'block';
+        return;
+      }
+      const bookingData = {
+    fromCity,
+    toCity,
+    fromCountry: 'Saudi Arabia', // Add these if needed
+    toCountry: '', // Set appropriate country
+    departureDate,
+    departureTime: selectedTime,
+    returnDate,
+    tripType,
+    adults,
+    children,
+    infants,
+    totalPassengers: parseInt(adults) + parseInt(children),
+    basePrice: parseFloat(totalPrice.replace(' SAR', '')) / (tripType === 'roundtrip' ? 2 : 1),
+    totalPrice: totalPrice,
+    seatPrice: 0,
+    selectedSeats: []
+  };
+
+  localStorage.setItem('bookingData', JSON.stringify(bookingData));
+  window.location.href = "seating.html";
+}
+
+    function handleTimeSelection(event) {
+      const selectedSlot = event.target;
+      if (selectedSlot.classList.contains('time-slot')) {
+        document.querySelectorAll('.time-slot').forEach(slot => slot.classList.remove('selected'));
+        selectedSlot.classList.add('selected');
+        document.getElementById('selectedTime').value = selectedSlot.getAttribute('data-time');
+      }
+    }
+
+    document.querySelectorAll('.time-slot').forEach(slot => {
+      slot.addEventListener('click', handleTimeSelection);
+    });
+
+    window.onload = function () {
+      const user = JSON.parse(localStorage.getItem('currentUser'));
+      if (!user) {
+        window.location.href = `login.html?returnUrl=${encodeURIComponent(window.location.href)}`;
+        return;
+      }
+      
+      const urlParams = new URLSearchParams(window.location.search);
+      const selectedCity = urlParams.get('city');
+      const selectedCountry = urlParams.get('country');
+      
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      const currentUserData = users.find(u => u.email === user.email);
+      
+      const fromCity = currentUserData?.city || 'Jeddah';
+      document.getElementById('fromCity').value = fromCity;
+      
+      if (selectedCity) {
+        document.getElementById('toCity').value = selectedCity;
+      }
+      
+      calculatePrice();
+      
+      document.querySelectorAll('input[name="tripType"]').forEach(radio => {
+        radio.addEventListener('change', calculatePrice);
+      });
+      
+      document.getElementById('adults').addEventListener('change', function() {
+        updatePassengerLimits();
+        calculatePrice();
+      });
+      
+      document.getElementById('children').addEventListener('change', calculatePrice);
+      document.getElementById('infants').addEventListener('change', updatePassengerLimits);
+      
+      document.querySelectorAll('input[name="tripType"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+          document.getElementById('returnDateGroup').style.display = 
+            this.value === 'roundtrip' ? 'block' : 'none';
+          calculatePrice();
+        });
+      });
+    };
+  </script>
+</body>
+</html>

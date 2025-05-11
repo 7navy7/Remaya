@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="auth.js"></script>
+  <meta charset="UTF-8">
+  <title>Flight Tracker - Remaya Air</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    body { 
+      font-family: 'Segoe UI', sans-serif; 
+      margin: 0; 
+      padding: 0; 
+      background: #fefaf6;
+    }
+    
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      background-color: #ffffff;
+      border-bottom: 1px solid #eee;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1001;
+    }
+    
+    #map { 
+      height: 100vh; 
+      width: 100vw; 
+      margin-top: 60px;
+    }
+    
+    .control-panel {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+      width: 350px;
+      position: absolute;
+      top: 80px;
+      right: 20px;
+      z-index: 1000;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: #555;
+    }
+    
+    select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fefaf6;
+    }
+    
+    .flight-info {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f9f5ff;
+      border-radius: 8px;
+    }
+    
+    .info-line {
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    
+    .track-btn {
+      background: linear-gradient(to right, #7e4cc2, #5a2d9a);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      width: 100%;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+    
+    .logo {
+      width: 50px;
+      cursor: pointer;
+    }
+    
+    .site-name {
+      font-size: 20px;
+      color: #d66767;
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="home-en.html" style="display: flex; align-items: center; text-decoration: none;">
+    <img src="logo.png" alt="Remaya Air Logo" class="logo">
+    <h1 class="site-name">Remaya Air</h1>
+  </a>
+  <nav>
+    <button class="language-btn" onclick="window.location.href='map-ar.html'">عربي</button>
+    <div class="menu-btn" onclick="toggleMenu()">☰</div>
+  </nav>
+</header>
+
+<div id="map"></div>
+
+<div class="control-panel">
+  <h2 style="color: #5a2d9a; margin-top: 0;">Flight Tracker</h2>
+  
+  <div class="form-group">
+    <label for="departure-country">Departure Country</label>
+    <select id="departure-country">
+      <option value="">Select Country</option>
+      <option value="SA">Saudi Arabia</option>
+      <option value="AE">United Arab Emirates</option>
+      <option value="UK">United Kingdom</option>
+      <option value="IT">Italy</option>
+      <option value="MY">Malaysia</option>
+      <option value="FR">France</option>
+      <option value="ES">Spain</option>
+      <option value="JP">Japan</option>
+      <option value="TH">Thailand</option>
+      <option value="KR">South Korea</option>
+      <option value="US">United States</option>
+      <option value="DE">Germany</option>
+    </select>
+  </div>
+  
+  <div class="form-group">
+    <label for="departure-city">Departure City</label>
+    <select id="departure-city" disabled>
+      <option value="">Select City</option>
+    </select>
+  </div>
+  
+  <div class="form-group">
+    <label for="destination-country">Destination Country</label>
+    <select id="destination-country">
+      <option value="">Select Country</option>
+      <option value="SA">Saudi Arabia</option>
+      <option value="AE">United Arab Emirates</option>
+      <option value="UK">United Kingdom</option>
+      <option value="IT">Italy</option>
+      <option value="MY">Malaysia</option>
+      <option value="FR">France</option>
+      <option value="ES">Spain</option>
+      <option value="JP">Japan</option>
+      <option value="TH">Thailand</option>
+      <option value="KR">South Korea</option>
+      <option value="US">United States</option>
+      <option value="DE">Germany</option>
+    </select>
+  </div>
+  
+  <div class="form-group">
+    <label for="destination-city">Destination City</label>
+    <select id="destination-city" disabled>
+      <option value="">Select City</option>
+    </select>
+  </div>
+  
+  <div class="flight-info" id="flight-details" style="display: none;">
+    <div class="info-line"><strong>Route:</strong> <span id="route">Jeddah → Rome</span></div>
+    <div class="info-line"><strong>Distance:</strong> <span id="distance">0</span> km</div>
+    <div class="info-line"><strong>Flight Time:</strong> <span id="flight-time">0</span> hours</div>
+  </div>
+  
+  <button class="track-btn" id="track-btn" disabled>Start Flight Tracking</button>
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+  // City database with coordinates
+  const citiesDatabase = {
+    "SA": { // Saudi Arabia
+      "Riyadh": [24.7136, 46.6753],
+      "Jeddah": [21.4858, 39.1925]
+    },
+    "AE": { // UAE
+      "Dubai": [25.2048, 55.2708],
+      "Abu Dhabi": [24.4539, 54.3773]
+    },
+    "UK": { // United Kingdom
+      "London": [51.5074, -0.1278],
+      "Manchester": [53.4808, -2.2426]
+    },
+    "IT": { // Italy
+      "Rome": [41.9028, 12.4964],
+      "Milan": [45.4642, 9.1900]
+    },
+    "MY": { // Malaysia
+      "Kuala Lumpur": [3.1390, 101.6869],
+      "Penang": [5.4164, 100.3327]
+    },
+    "FR": { // France
+      "Paris": [48.8566, 2.3522],
+      "Nice": [43.7102, 7.2620]
+    },
+    "ES": { // Spain
+      "Barcelona": [41.3851, 2.1734],
+      "Madrid": [40.4168, -3.7038]
+    },
+    "JP": { // Japan
+      "Tokyo": [35.6762, 139.6503],
+      "Osaka": [34.6937, 135.5023]
+    },
+    "TH": { // Thailand
+      "Bangkok": [13.7563, 100.5018],
+      "Phuket": [7.8804, 98.3923]
+    },
+    "KR": { // South Korea
+      "Seoul": [37.5665, 126.9780],
+      "Busan": [35.1796, 129.0756]
+    },
+    "US": { // United States
+      "New York": [40.7128, -74.0060],
+      "Los Angeles": [34.0522, -118.2437]
+    },
+    "DE": { // Germany
+      "Berlin": [52.5200, 13.4050],
+      "Munich": [48.1351, 11.5820]
+    }
+  };
+
+  // DOM elements
+  const departureCountry = document.getElementById('departure-country');
+  const departureCity = document.getElementById('departure-city');
+  const destinationCountry = document.getElementById('destination-country');
+  const destinationCity = document.getElementById('destination-city');
+  const trackBtn = document.getElementById('track-btn');
+  const flightDetails = document.getElementById('flight-details');
+  const routeDisplay = document.getElementById('route');
+  const distanceDisplay = document.getElementById('distance');
+  const flightTimeDisplay = document.getElementById('flight-time');
+
+  // Map variables
+  let map;
+  let path;
+  let marker;
+  let departureMarker;
+  let destinationMarker;
+  let animationId;
+
+  // Initialize map
+  function initMap() {
+    map = L.map('map', {
+      zoomSnap: 0.25,
+      wheelPxPerZoomLevel: 60
+    }).setView([25, 45], 4);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: 'OpenStreetMap contributors'
+    }).addTo(map);
+  }
+
+  // Populate cities based on country selection
+  function populateCities(countrySelect, citySelect) {
+    const countryCode = countrySelect.value;
+    citySelect.innerHTML = '<option value="">Select City</option>';
+    citySelect.disabled = !countryCode;
+    
+    if (countryCode && citiesDatabase[countryCode]) {
+      for (const city in citiesDatabase[countryCode]) {
+        citySelect.innerHTML += `<option value="${city}">${city}</option>`;
+      }
+    }
+    
+    checkSelections();
+  }
+
+  // Check if both cities are selected
+  function checkSelections() {
+    const departureSelected = departureCity.value && departureCity.value !== "";
+    const destinationSelected = destinationCity.value && destinationCity.value !== "";
+    
+    if (departureSelected && destinationSelected) {
+      showFlightDetails();
+      trackBtn.disabled = false;
+    } else {
+      flightDetails.style.display = "none";
+      trackBtn.disabled = true;
+    }
+  }
+
+  // Show flight details
+  function showFlightDetails() {
+    const fromCity = departureCity.value;
+    const toCity = destinationCity.value;
+    const fromCountry = departureCountry.options[departureCountry.selectedIndex].text;
+    const toCountry = destinationCountry.options[destinationCountry.selectedIndex].text;
+    
+    routeDisplay.textContent = `${fromCity}, ${fromCountry} → ${toCity}, ${toCountry}`;
+    
+    const fromCoords = citiesDatabase[departureCountry.value][fromCity];
+    const toCoords = citiesDatabase[destinationCountry.value][toCity];
+    const distance = calculateDistance(fromCoords, toCoords);
+    const flightTime = (distance / 850).toFixed(1); // Average speed 850 km/h
+    
+    distanceDisplay.textContent = distance;
+    flightTimeDisplay.textContent = flightTime;
+    
+    flightDetails.style.display = "block";
+  }
+
+  // Calculate distance between two coordinates (Haversine formula)
+  function calculateDistance(coord1, coord2) {
+    const R = 6371; // Earth radius in km
+    const dLat = (coord2[0] - coord1[0]) * Math.PI / 180;
+    const dLon = (coord2[1] - coord1[1]) * Math.PI / 180;
+    const a = 
+      Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.cos(coord1[0] * Math.PI / 180) * Math.cos(coord2[0] * Math.PI / 180) * 
+      Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return Math.round(R * c);
+  }
+
+  // Start flight tracking animation
+  function startTracking() {
+    // Clear any existing animation
+    if (animationId) {
+      cancelAnimationFrame(animationId);
+      if (path) map.removeLayer(path);
+      if (marker) map.removeLayer(marker);
+      if (departureMarker) map.removeLayer(departureMarker);
+      if (destinationMarker) map.removeLayer(destinationMarker);
+    }
+    
+    const fromCity = departureCity.value;
+    const toCity = destinationCity.value;
+    const start = citiesDatabase[departureCountry.value][fromCity];
+    const end = citiesDatabase[destinationCountry.value][toCity];
+    
+    // Create flight path
+    path = L.polyline([start, end], {
+      color: '#7e4cc2', 
+      weight: 4, 
+      dashArray: '6'
+    }).addTo(map);
+    
+    // Add departure and destination markers
+    departureMarker = L.marker(start, {
+      title: `Departure: ${fromCity}`
+    }).addTo(map).bindPopup(`Departure: ${fromCity}`);
+    
+    destinationMarker = L.marker(end, {
+      title: `Destination: ${toCity}`
+    }).addTo(map).bindPopup(`Destination: ${toCity}`);
+    
+    // Fit map to show both locations
+    map.fitBounds([start, end], { padding: [50, 50] });
+    
+    // Create plane icon
+    const planeIcon = L.icon({
+      iconUrl: 'https://cdn-icons-png.flaticon.com/512/2501/2501212.png',
+      iconSize: [34, 34],
+      iconAnchor: [17, 17],
+    });
+    
+    // Create plane marker
+    marker = L.marker(start, { icon: planeIcon }).addTo(map);
+    
+    // Animate flight
+    const totalSteps = 300;
+    let step = 0;
+    
+    function animateFlight() {
+      if (step > totalSteps) {
+        return;
+      }
+      
+      const progress = step / totalSteps;
+      const lat = start[0] + (end[0] - start[0]) * progress;
+      const lng = start[1] + (end[1] - start[1]) * progress;
+      
+      marker.setLatLng([lat, lng]);
+      map.panTo([lat, lng], { animate: true, duration: 0.5 });
+      
+      step++;
+      animationId = requestAnimationFrame(animateFlight);
+    }
+    
+    animateFlight();
+  }
+
+  // Event listeners
+  departureCountry.addEventListener('change', function() {
+    populateCities(departureCountry, departureCity);
+  });
+  
+  departureCity.addEventListener('change', checkSelections);
+  
+  destinationCountry.addEventListener('change', function() {
+    populateCities(destinationCountry, destinationCity);
+  });
+  
+  destinationCity.addEventListener('change', checkSelections);
+  
+  trackBtn.addEventListener('click', startTracking);
+
+  // Initialize the map
+  initMap();
+  
+  // Toggle side menu function
+  function toggleMenu() {
+    // Add your menu toggle functionality here
+    console.log("Menu toggled");
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="auth.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logging Out | Remaya Air</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Consistent styling */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      background-color: #f9f9f9;
+    }
+    
+    .logout-container {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+    
+    .spinner {
+      border: 4px solid rgba(0,0,0,0.1);
+      border-radius: 50%;
+      border-top: 4px solid #d66767;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    h2 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+    
+    p {
+      color: #555;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="logout-container">
+    <h2>Logging out...</h2>
+    <div class="spinner"></div>
+    <p>You're being securely logged out</p>
+  </div>
+
+  <script>
+    logout();
+    setTimeout(() => {
+      window.location.href = 'home-en.html';
+    }, 1500);
+  </script>
+</body>
+</html>

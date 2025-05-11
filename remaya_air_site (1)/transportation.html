@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="auth.js"></script>
+  <meta charset="UTF-8">
+  <title>Luxury Transportation - Remaya Air</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .service-detail-main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .intro-section {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .divider {
+      border-top: 1px solid #d66767;
+      margin: 30px 0;
+      text-align: center;
+    }
+    .divider span {
+      background: #fefaf6;
+      padding: 0 15px;
+      color: #d66767;
+      position: relative;
+      top: -12px;
+    }
+    .service-item {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .service-title {
+      color: #d66767;
+      margin-bottom: 10px;
+    }
+    .service-desc {
+      margin-left: 20px;
+    }
+    .service-desc li {
+      margin-bottom: 8px;
+      list-style-type: disc;
+    }
+    .book-btn {
+      background: linear-gradient(to right, #fca37d, #d66767);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-top: 15px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    .book-btn:hover {
+      background: linear-gradient(to right, #d66767, #c55a5a);
+      box-shadow: 0 2px 8px rgba(214, 103, 103, 0.4);
+      transform: translateY(-2px);
+    }
+    .service-image {
+      width: 100%;
+      max-height: 400px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin: 15px 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .vehicle-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+    .vehicle-card {
+      border: 1px solid #eee;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .vehicle-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+    .vehicle-info {
+      padding: 15px;
+    }
+    .vehicle-info h4 {
+      margin: 0 0 10px 0;
+      color: #d66767;
+    }
+    .note-box {
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 30px 0;
+      border-left: 4px solid #d66767;
+    }
+    h2 {
+      color: #d66767;
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+      
+  .vehicle-card {
+    border: 1px solid #eee;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  .vehicle-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+  .vehicle-card.selected {
+    border: 2px solid #d66767;
+    box-shadow: 0 0 15px rgba(214, 103, 103, 0.6);
+    animation: glow 1.5s infinite alternate;
+  }
+  @keyframes glow {
+    from {
+      box-shadow: 0 0 10px rgba(214, 103, 103, 0.6);
+    }
+    to {
+      box-shadow: 0 0 20px rgba(214, 103, 103, 0.8);
+    }
+  }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="home-en.html">
+      <img src="logo.png" alt="Remaya Air Logo" class="logo">
+    </a>
+    <h1 class="site-name">Remaya Air</h1>
+    <nav>
+  
+      <div class="menu-btn" onclick="toggleMenu()">☰</div>
+    </nav>
+  </header>
+
+  <div class="side-menu" id="sideMenu">
+    <ul>
+      <li><a href="signup.html">Sign Up / Login</a></li>
+      <li><a href="settings.html">Settings</a></li>
+      <li><a href="map.html">Interactive Map</a></li>
+      <li><a href="about.html">About Us</a></li>
+    </ul>
+  </div>
+
+  <main class="service-detail-main">
+    <div class="intro-section">
+      <h2>Complimentary Luxury Transportation</h2>
+      <p>Arrive in style and comfort with our premium chauffeur service, exclusively for our first and business class passengers.</p>
+    </div>
+
+    <img src="car.jpg" alt="Luxury Car" class="service-image">
+
+    <div class="divider"><span>Service Features</span></div>
+    
+    <div class="service-item">
+      <h3 class="service-title">Premium Benefits</h3>
+      <div class="service-desc">
+        <ul>
+          <li>Complimentary for all first-class and business-class passengers</li>
+          <li>Available for both airport transfers and city transportation</li>
+          <li>Professional, English-speaking chauffeurs</li>
+          <li>Meet-and-greet service at baggage claim</li>
+          <li>Complimentary bottled water and WiFi onboard</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="divider"><span>Our Luxury Fleet</span></div>
+    
+    <div class="vehicle-grid">
+      <div class="vehicle-card">
+        <img src="mercedes.jpg" alt="Mercedes S-Class">
+        <div class="vehicle-info">
+          <h4>Mercedes-Benz S-Class</h4>
+          <p>Ultimate luxury sedan with premium amenities</p>
+        </div>
+      </div>
+      <div class="vehicle-card">
+        <img src="bmw.jpg" alt="BMW 7 Series">
+        <div class="vehicle-info">
+          <h4>BMW 7 Series</h4>
+          <p>Sporty elegance with executive comfort</p>
+        </div>
+      </div>
+      <div class="vehicle-card">
+        <img src="lexus.jpg" alt="Lexus LS">
+        <div class="vehicle-info">
+          <h4>Lexus LS</h4>
+          <p>Japanese craftsmanship with serene comfort</p>
+        </div>
+      </div>
+      <div class="vehicle-card">
+        <img src="audi.jpg" alt="Audi A8">
+        <div class="vehicle-info">
+          <h4>Audi A8</h4>
+          <p>Advanced technology with quattro stability</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <p><strong>Important Note:</strong> This service must be requested at least 24 hours before your flight. Availability may vary by location. Present your boarding pass to your chauffeur.</p>
+    </div>
+
+    <div style="text-align: center;">
+      <button onclick="saveTransportToCart()" class="book-btn">Add to My Booking</button>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-links">
+      <a href="about.html">About</a> | <a href="services.html">Services</a> | <a href="contact.html">Contact</a>
+    </div>
+    <p>© 2025 Remaya Air. All rights reserved.</p>
+  </footer>
+  <script>
+    function toggleMenu() {
+    document.getElementById("sideMenu").classList.toggle("active");
+  }
+
+  let selectedVehicle = null;
+
+  function selectVehicle(cardElement, vehicleName) {
+    // Remove selected class from all cards
+    document.querySelectorAll('.vehicle-card').forEach(card => {
+      card.classList.remove('selected');
+    });
+    
+    // Add selected class to clicked card
+    cardElement.classList.add('selected');
+    selectedVehicle = vehicleName;
+  }
+
+  function saveTransportToCart() {
+    if (!selectedVehicle) {
+      alert('Please select a vehicle first');
+      return;
+    }
+
+    const transportServiceData = {
+      service: "Complimentary Luxury Transportation",
+      price: 0,
+      includedFor: "First & Business Class",
+      selectedVehicle: selectedVehicle
+    };
+  
+    localStorage.setItem('transportBooking', JSON.stringify(transportServiceData));
+  
+    // Show popup
+    const popup = document.createElement('div');
+    popup.style.position = 'fixed';
+    popup.style.top = '50%';
+    popup.style.left = '50%';
+    popup.style.transform = 'translate(-50%, -50%)';
+    popup.style.backgroundColor = '#fefaf6';
+    popup.style.padding = '20px';
+    popup.style.borderRadius = '8px';
+    popup.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+    popup.style.zIndex = '1000';
+    popup.style.textAlign = 'center';
+    popup.style.border = '2px solid #d66767';
+    
+    popup.innerHTML = `
+      <p style="margin:0; color:#d66767; font-weight:bold;">${selectedVehicle} service added to cart!</p>
+      <button onclick="this.parentElement.remove()" 
+              style="margin-top:10px; 
+                     background:linear-gradient(to right, #fca37d, #d66767); 
+                     color:white; 
+                     border:none; 
+                     padding:5px 15px; 
+                     border-radius:20px; 
+                     cursor:pointer;">
+        OK
+      </button>
+    `;
+    
+    document.body.appendChild(popup);
+  }
+
+  // Add click handlers to vehicle cards
+  document.addEventListener('DOMContentLoaded', function() {
+    const cards = document.querySelectorAll('.vehicle-card');
+    cards.forEach(card => {
+      const vehicleName = card.querySelector('h4').textContent;
+      card.addEventListener('click', function() {
+        selectVehicle(this, vehicleName);
+      });
+    });
+  });
+  </script>
+
+
+</body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="auth.js"></script>
+  <meta charset="UTF-8">
+  <title>Infant Care & Playroom - Remaya Air</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .service-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .intro-section {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .divider {
+      border-top: 1px solid #d66767;
+      margin: 30px 0;
+      text-align: center;
+    }
+    .divider span {
+      background: #fefaf6;
+      padding: 0 15px;
+      color: #d66767;
+      position: relative;
+      top: -12px;
+    }
+    .service-item {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .service-title {
+      color: #d66767;
+      margin-bottom: 10px;
+    }
+    .service-desc {
+      margin-left: 20px;
+    }
+    .service-desc li {
+      margin-bottom: 8px;
+      list-style-type: disc;
+    }
+    .book-btn {
+      background: linear-gradient(to right, #fca37d, #d66767);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-top: 10px;
+      float: right;
+    }
+    .service-image {
+      width: 100%;
+      max-height: 400px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin: 15px 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .note-box {
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 30px 0;
+      border-left: 4px solid #d66767;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="home-en.html">
+      <img src="logo.png" alt="Remaya Air Logo" class="logo">
+    </a>
+    <h1 class="site-name">Remaya Air</h1>
+    <nav>
+      <div class="menu-btn" onclick="toggleMenu()">☰</div>
+    </nav>
+  </header>
+
+  <div class="side-menu" id="sideMenu">
+    <ul>
+      <li><a href="signup.html">Sign Up / Login</a></li>
+      <li><a href="settings.html">Settings</a></li>
+      <li><a href="map.html">Interactive Map</a></li>
+      <li><a href="about.html">About Us</a></li>
+    </ul>
+  </div>
+
+  <main class="service-container">
+    <div class="intro-section">
+      <h2>Infant Care & In-Flight Playroom</h2>
+      <p>Travel with peace of mind knowing your little ones are cared for by our professional staff in our dedicated in-flight play area.</p>
+    </div>
+
+    <img src="baby.jpg" alt="Baby Service Room" class="service-image">
+
+    <div class="divider"><span>Core Services</span></div>
+    
+    <div class="service-item">
+      <h3 class="service-title">Supervised Play Area</h3>
+      <div class="service-desc">
+        <ul>
+          <li>Certified child care professionals on staff</li>
+          <li>Soft play mats and age-appropriate toys</li>
+          <li>Interactive games and activities</li>
+          <li>Regular sanitization of all surfaces and toys</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="service-item">
+      <h3 class="service-title">Rest & Feeding Zone</h3>
+      <div class="service-desc">
+        <ul>
+          <li>Quiet, dimmable lighting for naps</li>
+          <li>Comfortable rocking chairs for feeding</li>
+          <li>Bottle warmers and sterilizers available</li>
+          <li>Private nursing area with curtains</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="divider"><span>Premium Privileges</span></div>
+    
+    <div class="service-item">
+      <h3 class="service-title">Parent Support Services</h3>
+      <div class="service-desc">
+        <ul>
+          <li>Complimentary diaper bag with essentials</li>
+          <li>On-demand baby food and formula</li>
+          <li>Emergency baby supplies available</li>
+          <li>Priority boarding for families</li>
+          <li>Extra baggage allowance for baby items</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="service-item">
+      <h3 class="service-title">Special Amenities</h3>
+      <div class="service-desc">
+        <ul>
+          <li>Disposable changing pads and wipes</li>
+          <li>Baby toiletries and skincare products</li>
+          <li>Comfortable baby carriers for use onboard</li>
+          <li>Personalized welcome kit for your child</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <p><strong>Important Note:</strong> This premium service costs double the regular ticket fare and is available only for select long-haul flights. Reservations must be made at least 48 hours before departure.</p>
+    </div>
+
+    <button onclick="saveBabyServiceToCart()" class="book-btn">Add to Booking</button>
+  </main>
+
+  <footer>
+    <div class="footer-links">
+      <a href="about.html">About</a> | <a href="services.html">Services</a> | <a href="contact.html">Contact</a>
+    </div>
+    <p>© 2025 Remaya Air. All rights reserved.</p>
+  </footer>
+  <script>
+    function toggleMenu() {
+      document.getElementById("sideMenu").classList.toggle("active");
+    }
+
+    function saveBabyServiceToCart() {
+      const babyServiceData = {
+        service: "Infant Care & In-Flight Playroom",
+        priceMultiplier: 2 // because it's double fare
+      };
+  
+      localStorage.setItem('babyBooking', JSON.stringify(babyServiceData));
+  
+      // Create and show popup
+      const popup = document.createElement('div');
+      popup.style.position = 'fixed';
+      popup.style.top = '50%';
+      popup.style.left = '50%';
+      popup.style.transform = 'translate(-50%, -50%)';
+      popup.style.backgroundColor = '#fefaf6';
+      popup.style.padding = '20px';
+      popup.style.borderRadius = '8px';
+      popup.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+      popup.style.zIndex = '1000';
+      popup.style.textAlign = 'center';
+      popup.style.border = '2px solid #d66767';
+      
+      popup.innerHTML = `
+        <p style="margin:0; color:#d66767; font-weight:bold;">Service added to cart successfully!</p>
+        <button onclick="this.parentElement.remove()" 
+                style="margin-top:10px; 
+                       background:linear-gradient(to right, #fca37d, #d66767); 
+                       color:white; 
+                       border:none; 
+                       padding:5px 15px; 
+                       border-radius:20px; 
+                       cursor:pointer;">
+          OK
+        </button>
+      `;
+      
+      document.body.appendChild(popup);
+    }
+</script>
+
+
+
+ 
+</body>
+</html>

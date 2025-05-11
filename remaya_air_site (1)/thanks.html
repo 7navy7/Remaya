@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="auth.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thank You | Remaya Air</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Consistent side menu styles */
+    .side-menu {
+      display: none;
+      position: absolute;
+      top: 70px;
+      right: 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      padding: 15px 0;
+      width: 220px;
+      z-index: 1000;
+      border: none;
+    }
+    
+    .side-menu ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .side-menu ul li {
+      margin: 0;
+      transition: all 0.3s ease;
+    }
+    
+    .side-menu ul li a {
+      display: block;
+      padding: 12px 20px;
+      color: #555;
+      text-decoration: none;
+      font-size: 16px;
+      transition: all 0.2s;
+    }
+    
+    .side-menu ul li:hover {
+      background-color: #fefaf6;
+    }
+    
+    .side-menu ul li a:hover {
+      color: #d66767;
+      padding-left: 25px;
+    }
+    
+    .side-menu.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Thank you page styles */
+    .thank-you-container {
+      max-width: 500px;
+      margin: 30px auto;
+      padding: 30px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    
+    .message {
+      font-size: 18px;
+      color: #555;
+      margin: 20px 0;
+      line-height: 1.6;
+    }
+    
+    .book-btn {
+      display: inline-block;
+      padding: 12px 25px;
+      background-color: #d66767;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      text-decoration: none;
+      margin-top: 20px;
+    }
+    
+    .book-btn:hover {
+      background-color: #c55a5a;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+      <a href="home-en.html">
+        <img src="logo.png" alt="Remaya Air Logo" class="logo">
+      </a>
+      <h1 class="site-name">Remaya Air</h1>
+    </div>
+    <nav>
+      <div class="menu-btn" onclick="toggleMenu()">☰</div>
+    </nav>
+  </header>
+
+  <div class="side-menu" id="sideMenu">
+    <ul>
+      <li><a href="signup.html">Sign Up / Login</a></li>
+      <li><a href="settings.html">Settings</a></li>
+      <li><a href="map.html">Interactive Map</a></li>
+      <li><a href="about.html">About Us</a></li>
+    </ul>
+  </div>
+
+  <main>
+    <div class="thank-you-container">
+      <h1 class="tagline" id="thank-title">Thank you!</h1>
+      <p class="message" id="thank-message">We're processing your action...</p>
+      <a href="home-en.html" class="book-btn">Go to Home & Book Now</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-links">
+      <a href="#">Privacy</a> | <a href="#">Terms</a> | <a href="#">Support</a>
+    </div>
+    <p>&copy; 2025 Remaya Air. All rights reserved.</p>
+  </footer>
+  <script>
+    function toggleMenu() {
+      document.getElementById("sideMenu").classList.toggle("active");
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const source = params.get("source");
+
+    const title = document.getElementById("thank-title");
+    const message = document.getElementById("thank-message");
+
+    if (source === "signup") {
+      title.textContent = "Thanks for signing up!";
+      message.textContent = "Your account has been created. You will be redirected shortly.";
+      setTimeout(() => {
+          window.location.href = 'cities.html'; // Redirect after 3 seconds
+      }, 3000);
+    } else if (source === "login") {
+      title.textContent = "Welcome back!";
+      message.textContent = "You're now logged in. Ready to book your flight?";
+    } else {
+      title.textContent = "Thanks!";
+      message.textContent = "You're good to go.";
+    }
+</script>
+ 
+</body>
+</html>

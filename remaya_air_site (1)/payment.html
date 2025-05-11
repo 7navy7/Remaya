@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="auth.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complete Your Booking - Remaya Air</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    :root {
+      --primary: #d66767;
+      --secondary: #fca37d;
+      --accent: #fefaf6;
+      --light: #ffffff;
+      --dark: #333333;
+      --shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: var(--dark);
+      background-color: var(--accent);
+      line-height: 1.6;
+    }
+    
+    header {
+      background-color: var(--light);
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow);
+    }
+    
+    .logo {
+      height: 50px;
+    }
+    
+    .site-name {
+      color: var(--primary);
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    
+    .flex-container {
+      display: flex;
+      gap: 30px;
+    }
+    
+    .main-content {
+      flex: 2;
+    }
+    
+    .sidebar {
+      flex: 1;
+    }
+    
+    .booking-summary, .payment-methods, .price-summary, .passenger-details {
+      background: var(--light);
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 2rem;
+    }
+    
+    .flight-details {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .seat-details {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: var(--accent);
+      border-radius: 10px;
+      border: 1px solid #eee;
+    }
+    
+    .seat-badge {
+      width: 50px;
+      height: 50px;
+      background: var(--primary);
+      color: white;
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    
+    .seat-numbers {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    
+    .seat-number {
+      background: var(--primary);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+    
+    .payment-tabs {
+      display: flex;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .payment-tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+    }
+    
+    .payment-tab.active {
+      border-bottom-color: var(--primary);
+      font-weight: bold;
+    }
+    
+    .payment-form {
+      display: none;
+    }
+    
+    .payment-form.active {
+      display: block;
+    }
+    
+    .price-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    
+    .price-total {
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+    }
+    
+    .pay-now-btn {
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 1rem;
+      transition: all 0.3s;
+    }
+    
+    .apple-pay-btn {
+      background: black !important;
+    }
+    
+    /* Passenger form styles */
+    .passenger-form {
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .form-row {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .form-group {
+      flex: 1;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    .form-group input {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    
+    @media (max-width: 768px) {
+      .flex-container {
+        flex-direction: column;
+      }
+      
+      .flight-details {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      
+      .form-row {
+        flex-direction: column;
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="home-en.html">
+      <img src="logo.png" alt="Remaya Air Logo" class="logo">
+    </a>
+    <h1 class="site-name">Remaya Air</h1>
+  </header>
+  
+  <div class="container">
+    <h1>Complete Your Booking</h1>
+    
+    <div class="flex-container">
+      <div class="main-content">
+        <div class="booking-summary">
+          <h2>Flight Summary</h2>
+          <div class="flight-details">
+            <div>
+              <h3 id="departureCity"></h3>
+              <div id="departureTime"></div>
+              <div id="departureDate"></div>
+            </div>
+            <div>
+              <div id="flightDuration">2h 15m</div>
+              <div>➝</div>
+            </div>
+            <div>
+              <h3 id="arrivalCity"></h3>
+              <div id="arrivalTime"></div>
+              <div id="arrivalDate"></div>
+            </div>
+          </div>
+          
+          <div class="seat-details">
+            <div class="seat-badge" id="firstSeat"></div>
+            <div>
+              <h3>Your Seats</h3>
+              <div class="seat-numbers" id="seatNumbers">
+                <!-- Seat numbers will appear here -->
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="passenger-details">
+          <h2>Passenger Details</h2>
+          <div id="passengerFormsContainer">
+            <!-- Passenger forms will be generated here -->
+          </div>
+        </div>
+        
+        <div class="payment-methods">
+          <h2>Payment Method</h2>
+          
+          <div class="payment-tabs">
+            <div class="payment-tab active" onclick="switchTab('credit-card')">
+              <img src="visa.jpg" height="20" alt="Visa"> 
+              <img src="mastercard.jpg" height="20" alt="Mastercard">
+              <img src="mada.jpg" height="20" alt="Mada">
+            </div>
+            <div class="payment-tab" onclick="switchTab('apple-pay')">
+              <i class="fab fa-apple"></i> Apple Pay
+            </div>
+          </div>
+          
+          <div class="payment-form active" id="credit-card">
+            <button class="pay-now-btn" onclick="processPayment('credit')">
+              Complete Payment
+            </button>
+          </div>
+          
+          <div class="payment-form" id="apple-pay">
+            <button class="pay-now-btn apple-pay-btn" onclick="processPayment('apple')">
+              <i class="fab fa-apple"></i> Pay with Apple Pay
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="sidebar">
+        <div class="price-summary">
+          <h2>Price Summary</h2>
+          <div class="price-item">
+            <span>Base Fare (<span id="passengerCount">1</span>x)</span>
+            <span id="baseFarePrice">0 SAR</span>
+          </div>
+          <div class="price-item">
+            <span>Seat Selection</span>
+            <span id="seatPrice">0 SAR</span>
+          </div>
+          <div class="price-total">
+            <span>Total</span>
+            <span id="totalPrice">0 SAR</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      try {
+        // Get the STORAGE_KEY from auth.js
+        const STORAGE_KEY = 'remaya-air-users';
+        // Load booking data from localStorage
+        const bookingData = JSON.parse(localStorage.getItem('bookingData')) || {};
+        
+        // Display flight details
+        if (bookingData.fromCity) {
+          document.getElementById('departureCity').textContent = bookingData.fromCity;
+        }
+        if (bookingData.toCity) {
+          document.getElementById('arrivalCity').textContent = bookingData.toCity;
+        }
+        
+        // Display date if available
+        if (bookingData.departureDate) {
+          const formattedDate = formatDate(bookingData.departureDate);
+          document.getElementById('departureDate').textContent = formattedDate;
+          document.getElementById('arrivalDate').textContent = formattedDate;
+        }
+        
+        // Display time if available
+        if (bookingData.departureTime) {
+          document.getElementById('departureTime').textContent = formatTime(bookingData.departureTime);
+          
+          // Calculate arrival time (assuming flight duration is 2h 15m)
+          const arrivalTime = calculateArrivalTime(bookingData.departureTime, 2, 15);
+          document.getElementById('arrivalTime').textContent = arrivalTime;
+        }
+        
+        // Display pricing information
+        if (bookingData.basePrice !== undefined) {
+          document.getElementById('baseFarePrice').textContent = 
+            formatCurrency(parseFloat(bookingData.basePrice));
+        }
+        
+        if (bookingData.seatPrice !== undefined) {
+          document.getElementById('seatPrice').textContent = 
+            formatCurrency(parseFloat(bookingData.seatPrice));
+        }
+        
+        // Calculate and display total price
+        const basePrice = parseFloat(bookingData.basePrice) || 0;
+        const seatPrice = parseFloat(bookingData.seatPrice) || 0;
+        const total = basePrice + seatPrice;
+        document.getElementById('totalPrice').textContent = formatCurrency(total);
+        
+        // Display selected seats
+        if (Array.isArray(bookingData.selectedSeats) && bookingData.selectedSeats.length > 0) {
+          const seatNumbersContainer = document.getElementById('seatNumbers');
+          const firstSeatBadge = document.getElementById('firstSeat');
+          
+          // Display first seat in badge
+          firstSeatBadge.textContent = bookingData.selectedSeats[0];
+          
+          // Display all seats
+          seatNumbersContainer.innerHTML = bookingData.selectedSeats
+            .map(seat => `<div class="seat-number">${seat}</div>`)
+            .join('');
+          
+          // Update passenger count
+          const passengerCount = bookingData.selectedSeats.length;
+          document.getElementById('passengerCount').textContent = passengerCount;
+        }
+
+        // Generate passenger forms
+        generatePassengerForms(bookingData.totalPassengers || 1);
+      } catch (error) {
+        console.error('Error loading booking data:', error);
+        alert('Error loading booking information. Please try again.');
+      }
+    });
+
+    // Helper functions
+    function formatCurrency(amount) {
+      return isNaN(amount) ? '0 SAR' : `${amount.toFixed(2)} SAR`;
+    }
+
+    function formatDate(dateString) {
+      try {
+        const options = { year: 'numeric', month: 'short', day: 'numeric' };
+        return new Date(dateString).toLocaleDateString('en-US', options);
+      } catch {
+        return dateString; // Return as-is if formatting fails
+      }
+    }
+
+    function formatTime(timeString) {
+      try {
+        const [hours, minutes] = timeString.split(':');
+        return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
+      } catch {
+        return timeString;
+      }
+    }
+
+    function calculateArrivalTime(departureTime, hoursToAdd, minutesToAdd) {
+      try {
+        const [hours, minutes] = departureTime.split(':').map(Number);
+        let arrivalHours = hours + hoursToAdd;
+        let arrivalMinutes = minutes + minutesToAdd;
+        
+        if (arrivalMinutes >= 60) {
+          arrivalHours += 1;
+          arrivalMinutes -= 60;
+        }
+        
+        if (arrivalHours >= 24) {
+          arrivalHours -= 24;
+        }
+        
+        return `${arrivalHours.toString().padStart(2, '0')}:${arrivalMinutes.toString().padStart(2, '0')}`;
+      } catch {
+        return '';
+      }
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.payment-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      document.querySelectorAll('.payment-form').forEach(form => {
+        form.classList.remove('active');
+      });
+      
+      document.querySelector(`.payment-tab[onclick="switchTab('${tabId}')"]`).classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+    }
+
+    function generatePassengerForms(passengerCount) {
+      const container = document.getElementById('passengerFormsContainer');
+      container.innerHTML = '';
+      
+      for (let i = 0; i < passengerCount; i++) {
+        const form = document.createElement('div');
+        form.className = 'passenger-form';
+        form.innerHTML = `
+          <h3>Passenger ${i + 1}</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>First Name</label>
+              <input type="text" id="passenger-${i}-firstName" required>
+            </div>
+            <div class="form-group">
+              <label>Last Name</label>
+              <input type="text" id="passenger-${i}-lastName" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Passport Number</label>
+              <input type="text" id="passenger-${i}-passport">
+            </div>
+            <div class="form-group">
+              <label>Date of Birth</label>
+              <input type="date" id="passenger-${i}-dob">
+            </div>
+          </div>
+        `;
+        container.appendChild(form);
+      }
+    }
+
+    function processPayment(method) {
+      try {
+        // Show loading state
+        const btn = document.querySelector(`.pay-now-btn${method === 'apple' ? '.apple-pay-btn' : ''}`);
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        btn.disabled = true;
+
+        // Get booking data
+        const bookingData = JSON.parse(localStorage.getItem('bookingData')) || {};
+        const passengerCount = bookingData.totalPassengers || 1;
+        
+        // Collect passenger details
+        const passengers = [];
+        for (let i = 0; i < passengerCount; i++) {
+          passengers.push({
+            firstName: document.getElementById(`passenger-${i}-firstName`).value,
+            lastName: document.getElementById(`passenger-${i}-lastName`).value,
+            passport: document.getElementById(`passenger-${i}-passport`).value,
+            dob: document.getElementById(`passenger-${i}-dob`).value,
+            seat: bookingData.selectedSeats?.[i] || `A${i+1}`
+          });
+          
+          // Validate required fields
+          if (!passengers[i].firstName || !passengers[i].lastName) {
+            throw new Error(`Please fill all required fields for Passenger ${i + 1}`);
+          }
+        }
+
+        // Get current user using auth.js functions
+        const user = getCurrentUser();
+        if (!user) {
+          alert('Please login first');
+          window.location.href = 'login.html';
+          return;
+        }
+
+        // Create booking reference
+        const bookingRef = {
+          ...bookingData,
+          bookingId: generateBookingId(),
+          paymentMethod: method,
+          paymentDate: new Date().toISOString(),
+          status: 'confirmed',
+          passengers: passengers
+        };
+
+        // Save the booking data
+        localStorage.setItem('currentBooking', JSON.stringify(bookingRef));
+        
+        // Update user's bookings
+        const users = getUsers();
+        const userIndex = users.findIndex(u => u.email === user.email);
+        
+        if (userIndex === -1) {
+          alert('User session expired. Please login again.');
+          window.location.href = 'login.html';
+          return;
+        }
+
+        if (!users[userIndex].bookings) {
+          users[userIndex].bookings = [];
+        }
+        
+        users[userIndex].bookings.push(bookingRef);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+
+        // Redirect to tickets page
+        window.location.href = 'tickets.html?id=' + bookingRef.bookingId;
+        
+      } catch (error) {
+        console.error('Payment processing error:', error);
+        alert(error.message || 'An error occurred during payment processing. Please try again.');
+        
+        // Reset button state if error occurs
+        const btn = document.querySelector(`.pay-now-btn${method === 'apple' ? '.apple-pay-btn' : ''}`);
+        if (btn) {
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+        }
+      }
+    }
+
+    function generateBookingId() {
+      return 'RMY-' + Date.now().toString().slice(-8);
+    }
+  </script>
+</body>
+</html>

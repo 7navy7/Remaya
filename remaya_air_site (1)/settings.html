@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="auth.js"></script>
+  <meta charset="UTF-8">
+  <title>Account Settings - Remaya Air</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Main Container */
+    .settings-container {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 30px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+    
+    /* Profile Section */
+    .profile-section {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .profile-pic {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #fca37d;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+    
+    .upload-btn {
+      background: #fefaf6;
+      color: #d66767;
+      border: 1px dashed #d66767;
+      padding: 8px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-top: 15px;
+      display: inline-block;
+      transition: all 0.3s;
+    }
+    
+    /* Form Styles */
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #555;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      background: #fefaf6;
+      transition: border 0.3s;
+    }
+    
+    /* Two Column Layout */
+    .two-columns {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .two-columns .form-group {
+      flex: 1;
+    }
+    
+    /* Buttons */
+    .save-btn {
+      background: linear-gradient(to right, #fca37d, #d66767);
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 30px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: all 0.3s;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .two-columns {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="home-en.html">
+      <img src="logo.png" alt="Remaya Air Logo" class="logo">
+    </a>
+    <h1 class="site-name">Remaya Air</h1>
+    <nav>
+   
+      <div class="menu-btn" onclick="toggleMenu()">☰</div>
+    </nav>
+  </header>
+  
+
+<div class="side-menu" id="sideMenu">
+  <ul>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li><a href="my-bookings.html">My Bookings</a></li>
+    <li><a href="settings.html">Account Settings</a></li>
+    <li><a href="logout.html">Logout</a></li>
+  </ul>
+</div>
+
+<main>
+  <div class="settings-container">
+    <h2 style="color: #d66767;">Account Settings</h2>
+    
+    <!-- Profile Picture Section -->
+    <div class="profile-section">
+      <img src="profile-placeholder.jpg" alt="Profile" class="profile-pic" id="profileDisplay">
+      <input type="file" id="profileInput" accept="image/*" style="display: none;">
+      <label for="profileInput" class="upload-btn">Change Profile Photo</label>
+    </div>
+    
+    <!-- Personal Information -->
+    <div class="two-columns">
+      <div class="form-group">
+        <label for="firstName">First Name</label>
+        <input type="text" id="firstName" class="form-control" value="Mohammed">
+      </div>
+      <div class="form-group">
+        <label for="lastName">Last Name</label>
+        <input type="text" id="lastName" class="form-control" value="Al-Saud">
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label for="email">Email Address</label>
+      <input type="email" id="email" class="form-control" value="m.alsaud@example.com">
+    </div>
+    
+    <div class="form-group">
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" class="form-control" value="+966501234567">
+    </div>
+    
+    <!-- Save Button -->
+    <button class="save-btn" onclick="saveSettings()">Save Changes</button>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-links">
+    <a href="about.html">About Us</a> | 
+    <a href="contact.html">Contact</a> | 
+    <a href="privacy.html">Privacy Policy</a>
+  </div>
+  <p>© 2025 Remaya Air. All rights reserved.</p>
+</footer>
+
+<script>
+  // Toggle side menu
+  function toggleMenu() {
+    document.getElementById("sideMenu").classList.toggle("active");
+  }
+
+  // Profile picture upload
+  document.getElementById('profileInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        document.getElementById('profileDisplay').src = event.target.result;
+      }
+      reader.readAsDataURL(file);
+    }
+  });
+
+  // Save settings
+  function saveSettings() {
+    // Here you would normally send data to server
+    alert('Settings saved successfully!');
+  }
+</script>
+<!-- Add this script -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    if (!user) {
+      window.location.href = 'login.html?returnUrl=settings.html';
+      return;
+    }
+  
+    const users = JSON.parse(localStorage.getItem('users'));
+    const userData = users.find(u => u.email === user.email);
+    
+    if (userData) {
+      document.getElementById('firstName').value = userData.firstName || '';
+      document.getElementById('lastName').value = userData.lastName || '';
+      document.getElementById('email').value = userData.email || '';
+      document.getElementById('phone').value = userData.phone || '';
+    }
+  });
+  
+  function saveSettings() {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    if (!user) return;
+  
+    const users = JSON.parse(localStorage.getItem('users'));
+    const userIndex = users.findIndex(u => u.email === user.email);
+    
+    if (userIndex !== -1) {
+      users[userIndex] = {
+        ...users[userIndex],
+        firstName: document.getElementById('firstName').value,
+        lastName: document.getElementById('lastName').value,
+        phone: document.getElementById('phone').value
+      };
+      
+      localStorage.setItem('users', JSON.stringify(users));
+      alert('Settings saved!');
+    }
+  }
+  </script>
+</body>
+</html>

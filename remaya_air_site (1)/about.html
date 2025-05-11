@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="auth.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Remaya Air - About Us</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Improved side menu styles */
+    .side-menu {
+      display: none;
+      position: absolute;
+      top: 70px;
+      right: 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      padding: 15px 0;
+      width: 220px;
+      z-index: 1000;
+      border: none;
+    }
+    
+    .side-menu ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .side-menu ul li {
+      margin: 0;
+      transition: all 0.3s ease;
+    }
+    
+    .side-menu ul li a {
+      display: block;
+      padding: 12px 20px;
+      color: #555;
+      text-decoration: none;
+      font-size: 16px;
+      transition: all 0.2s;
+    }
+    
+    .side-menu ul li:hover {
+      background-color: #fefaf6;
+    }
+    
+    .side-menu ul li a:hover {
+      color: #d66767;
+      padding-left: 25px;
+    }
+    
+    .side-menu.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Improved about page styles */
+    .about-section {
+      max-width: 1000px;
+      margin: 80px auto 40px;
+      padding: 0 20px;
+      text-align: center;
+    }
+    
+    .about-image {
+      width: 100%;
+      max-width: 800px;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      margin: 30px 0;
+      transition: transform 0.3s ease;
+    }
+    
+    .about-image:hover {
+      transform: scale(1.02);
+    }
+    
+    .tagline {
+      font-style: italic;
+      color: #d66767;
+      font-size: 1.2rem;
+      margin-top: 20px;
+    }
+    
+    .about-section p {
+      line-height: 1.8;
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+    }
+    
+    .about-section h2 {
+      color: #d66767;
+      font-size: 2.2rem;
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+      <a href="home-en.html">
+        <img src="logo.png" alt="Remaya Air Logo" class="logo">
+      </a>
+      <h1 class="site-name">Remaya Air</h1>
+    </div>
+    <nav>
+      <div class="menu-btn" onclick="toggleMenu()">☰</div>
+    </nav>
+  </header>
+
+  <div class="side-menu" id="sideMenu">
+    <ul>
+      <li><a href="signup.html">Sign Up / Login</a></li>
+      <li><a href="settings.html">Settings</a></li>
+      <li><a href="map.html">Interactive Map</a></li>
+      <li><a href="about.html" class="active">About Us</a></li>
+    </ul>
+  </div>
+
+  <main>
+    <section class="about-section">
+      <h2>About Remaya Air</h2>
+      <p>
+        At Remaya Air, we believe travel should be more than just a destination — it should be a luxurious experience from takeoff to touchdown.
+      </p>
+      <img src="crew.png" alt="Remaya Air Crew" class="about-image">
+      <p>
+        Founded with a vision of redefining private aviation, Remaya Air delivers exceptional service, cutting-edge comfort, and tailored experiences that put you at the center of your journey.
+      </p>
+      <p>
+        Whether you're flying for business or leisure, our fleet of elite private aircraft is ready to take you anywhere in the world, with elegance and ease.
+      </p>
+      <p class="tagline">"Travel with elegance. Fly with Remaya Air."</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-links">
+      <a href="about.html">About</a> | <a href="services.html">Services</a> | <a href="contact.html">Contact</a>
+    </div>
+    <p>© 2025 Remaya Air. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById("sideMenu").classList.toggle("active");
+    }
+  </script>
+</body>
+</html>

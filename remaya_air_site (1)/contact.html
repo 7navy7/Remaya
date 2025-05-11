@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="auth.js"></script>
+  <meta charset="UTF-8">
+  <title>Contact Us - Remaya Air</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Improved side menu styles */
+    .side-menu {
+      display: none;
+      position: absolute;
+      top: 70px;
+      right: 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      padding: 15px 0;
+      width: 220px;
+      z-index: 1000;
+      border: none;
+    }
+    
+    .side-menu ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .side-menu ul li {
+      margin: 0;
+      transition: all 0.3s ease;
+    }
+    
+    .side-menu ul li a {
+      display: block;
+      padding: 12px 20px;
+      color: #555;
+      text-decoration: none;
+      font-size: 16px;
+      transition: all 0.2s;
+    }
+    
+    .side-menu ul li:hover {
+      background-color: #fefaf6;
+    }
+    
+    .side-menu ul li a:hover {
+      color: #d66767;
+      padding-left: 25px;
+    }
+    
+    .side-menu.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Contact page styles */
+    .contact-container {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 0 20px;
+    }
+    .contact-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .social-media {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    .social-icon {
+      width: 40px;
+      height: 40px;
+      transition: transform 0.3s ease;
+    }
+    .social-icon:hover {
+      transform: scale(1.1);
+    }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    .contact-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-left: 4px solid #d66767;
+    }
+    .contact-card h3 {
+      color: #d66767;
+      margin-top: 0;
+    }
+    .welcome-message {
+      text-align: center;
+      line-height: 1.6;
+      margin: 2rem auto;
+      max-width: 800px;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+    <header>
+        <a href="home-en.html">
+          <img src="logo.png" alt="Remaya Air Logo" class="logo">
+        </a>
+        <h1 class="site-name">Remaya Air</h1>
+        <nav>
+        
+          <div class="menu-btn" onclick="toggleMenu()">☰</div>
+        </nav>
+      </header>
+      
+
+  <div class="side-menu" id="sideMenu">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="booking.html">Book a Flight</a></li>
+      <li><a href="about.html">About Us</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+
+  <main class="contact-container">
+    <div class="contact-header">
+      <h2>Contact Remaya Air</h2>
+      <p class="welcome-message">
+        Experience the pinnacle of private aviation with Remaya Air. Our team is available 24/7 to assist with your travel needs and ensure your journey is nothing short of extraordinary.
+      </p>
+    </div>
+
+    <div class="social-media">
+      <a href="https://x.com/remaya_air?s=21" target="_blank" aria-label="Follow us on X">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/5a/X_icon_2.svg" alt="X (Twitter)" class="social-icon">
+      </a>
+      <a href="https://www.instagram.com/remaya_air?igsh=MWhxdXUzbzFwODJncw%3D%3D&utm_source=qr" target="_blank" aria-label="Follow us on Instagram">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" alt="Instagram" class="social-icon">
+      </a>
+    </div>
+
+    <div class="welcome-message">
+      <p>Follow us on social media for exclusive updates, special offers, and glimpses of our luxury private jet experiences.</p>
+      <p>With only 15 seats per flight, we guarantee personalized service and unmatched privacy for our distinguished guests.</p>
+    </div>
+
+    <div class="contact-grid">
+      <div class="contact-card">
+        <h3>General Inquiries</h3>
+        <p><strong>Email:</strong> info@remaya-air.com</p>
+        <p><strong>Phone:</strong> +966 12 345 6789</p>
+        <p>Available 24/7 for all your questions about our private jet services.</p>
+      </div>
+      
+      <div class="contact-card">
+        <h3>Flight Bookings</h3>
+        <p><strong>Email:</strong> bookings@remaya-air.com</p>
+        <p><strong>Phone:</strong> +966 55 987 6543</p>
+        <p>Dedicated team for immediate flight reservations and itinerary planning.</p>
+      </div>
+      
+      <div class="contact-card">
+        <h3>Corporate Services</h3>
+        <p><strong>Email:</strong> corporate@remaya-air.com</p>
+        <p><strong>Phone:</strong> +966 11 222 3333</p>
+        <p>Tailored aviation solutions for businesses and VIP clients.</p>
+      </div>
+    </div>
+
+    <div class="welcome-message">
+      <p>Remaya Air - Redefining private aviation with bespoke travel experiences across the Middle East and beyond.</p>
+      <p>Our fleet of luxury jets ensures comfort, privacy, and efficiency for the most discerning travelers.</p>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-links">
+      <a href="about.html">About</a> | 
+      <a href="services.html">Services</a> | 
+      <a href="contact.html">Contact</a>
+    </div>
+    <p>© 2025 Remaya Air. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Reuse your existing toggleMenu function
+    function toggleMenu() {
+      document.getElementById("sideMenu").classList.toggle("active");
+    }
+  </script>
+</body>
+</html>

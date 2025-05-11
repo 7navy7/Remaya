@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="auth.js"></script>
+  <meta charset="UTF-8">
+  <title>Special Meals & Allergies - Remaya Air</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .catering-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .intro-section {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .divider {
+      border-top: 1px solid #d66767;
+      margin: 30px 0;
+      text-align: center;
+    }
+    .divider span {
+      background: #fefaf6;
+      padding: 0 15px;
+      color: #d66767;
+      position: relative;
+      top: -12px;
+    }
+    .meal-category {
+      margin-bottom: 40px;
+    }
+    .meal-item {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .meal-title {
+      color: #d66767;
+      margin-bottom: 10px;
+    }
+    .meal-desc {
+      margin-left: 20px;
+    }
+    .meal-desc li {
+      margin-bottom: 8px;
+      list-style-type: disc;
+    }
+    .select-btn {
+      background: linear-gradient(to right, #fca37d, #d66767);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-top: 10px;
+      float: right;
+    }
+    .diet-selection {
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 30px 0;
+    }
+    .diet-selection select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+    .order-summary {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-top: 30px;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="home-en.html">
+      <img src="logo.png" alt="Remaya Air Logo" class="logo">
+    </a>
+    <h1 class="site-name">Remaya Air</h1>
+    <nav>
+   
+      <div class="menu-btn" onclick="toggleMenu()">☰</div>
+    </nav>
+  </header>
+  
+
+  <div class="side-menu" id="sideMenu">
+    <ul>
+      <li><a href="signup.html">Sign Up / Login</a></li>
+      <li><a href="settings.html">Settings</a></li>
+      <li><a href="map.html">Interactive Map</a></li>
+      <li><a href="about.html">About Us</a></li>
+    </ul>
+  </div>
+
+  <main class="catering-container">
+    <div class="intro-section">
+      <h2>Special Meals & Allergies</h2>
+      <p>At Remaya Air, we prioritize your comfort and health by offering a variety of special meals for passengers with allergies or specific dietary requirements.</p>
+    </div>
+
+    <div class="diet-selection">
+      <h3>Select Your Dietary Requirements</h3>
+      <select id="dietType" onchange="filterMeals()">
+        <option value="all">Show All Meals</option>
+        <option value="allergy">Allergy-Friendly Meals</option>
+        <option value="medical">Health & Medical Meals</option>
+        <option value="vegetarian">Vegetarian & Vegan Meals</option>
+        <option value="lifestyle">Lifestyle-Based Meals</option>
+      </select>
+    </div>
+
+    <!-- Allergy-Friendly Meals -->
+    <div class="meal-category" data-category="allergy">
+      <div class="divider"><span>1. Allergy-Friendly Meals</span></div>
+      
+      <div class="meal-item">
+        <h3 class="meal-title">Nut-Free Meal</h3>
+        <div class="meal-desc">
+          <ul>
+            <li>Grilled chicken breast with white rice and sautéed vegetables</li>
+            <li>Simple green salad</li>
+            <li>Fresh fruit (apple, cantaloupe)</li>
+          </ul>
+        </div>
+        <button class="select-btn" onclick="selectMeal('Nut-Free Meal')">Select</button>
+      </div>
+      
+      <div class="meal-item">
+        <h3 class="meal-title">Gluten-Free Meal</h3>
+        <div class="meal-desc">
+          <ul>
+            <li>Grilled fish with quinoa and steamed vegetables</li>
+            <li>Lentil soup (no bread)</li>
+            <li>Mixed fruits</li>
+          </ul>
+        </div>
+        <button class="select-btn" onclick="selectMeal('Gluten-Free Meal')">Select</button>
+      </div>
+      
+      <div class="meal-item">
+        <h3 class="meal-title">Lactose-Free Meal</h3>
+        <div class="meal-desc">
+          <ul>
+            <li>Tandoori meat with basmati rice</li>
+            <li>Hummus and tahini salad</li>
+            <li>Dates or fresh fruit</li>
+          </ul>
+        </div>
+        <button class="select-btn" onclick="selectMeal('Lactose-Free Meal')">Select</button>
+      </div>
+    </div>
+
+    <!-- Health & Medical Meals -->
+    <div class="meal-category" data-category="medical">
+      <div class="divider"><span>2. Health & Medical Meals</span></div>
+      
+      <div class="meal-item">
+        <h3 class="meal-title">Diabetic Meal</h3>
+        <div class="meal-desc">
+          <ul>
+            <li>Boiled chicken breast with broccoli and carrots</li>
+            <li>Cucumber and tomato salad with olive oil</li>
+            <li>Sugar-free fat-free yogurt</li>
+          </ul>
+        </div>
+        <button class="select-btn" onclick="selectMeal('Diabetic Meal')">Select</button>
+      </div>
+      
+      <div class="meal-item">
+        <h3 class="meal-title">Low-Sodium Meal</h3>
+        <div class="meal-desc">
+          <ul>
+            <li>Pasta with light white sauce (no added salt)</li>
+            <li>Lettuce and avocado salad</li>
+            <li>Banana</li>
+          </ul>
+        </div>
+        <button class="select-btn" onclick="selectMeal('Low-Sodium Meal')">Select</button>
+      </div>
+      
+      <div class="meal-item">
+        <h3 class="meal-title">Low-Fat Meal</h3>
+        <div class="meal-desc">
+          <ul>
+            <li>Grilled salmon (no skin) with steamed vegetables</li>
+            <li>Cabbage salad with lemon</li>
+            <li>Fresh fruit (kiwi, apple)</li>
+          </ul>
+        </div>
+        <button class="select-btn" onclick="selectMeal('Low-Fat Meal')">Select</button>
+      </div>
+    </div>
+
+    <!-- Vegetarian & Vegan Meals -->
+    <div class="meal-category" data-category="vegetarian">
+      <div class="divider"><span>3. Vegetarian & Vegan Meals</span></div>
+      
+      <div class="meal-item">
+        <h3 class="meal-title">Vegetarian Meal</h3>
+        <div class="meal-desc">
+          <ul>
+            <li>Stuffed zucchini and eggplant</li>
+            <li>Tabouleh salad</li>
+            <li>White cheese + brown bread</li>
+          </ul>
+        </div>
+        <button class="select-btn" onclick="selectMeal('Vegetarian Meal')">Select</button>
+      </div>
+      
+      <div class="meal-item">
+        <h3 class="meal-title">Vegan Meal</h3>
+        <div class="meal-desc">
+          <ul>
+            <li>Vegetable curry with brown rice</li>
+            <li>Lentil and chickpea salad</li>
+            <li>Fresh fruits + dark chocolate cube</li>
+          </ul>
+        </div>
+        <button class="select-btn" onclick="selectMeal('Vegan Meal')">Select</button>
+      </div>
+    </div>
+
+    <!-- Lifestyle-Based Meals -->
+    <div class="meal-category" data-category="lifestyle">
+      <div class="divider"><span>4. Lifestyle-Based Meals</span></div>
+      
+      <div class="meal-item">
+        <h3 class="meal-title">Keto Meal</h3>
+        <div class="meal-desc">
+          <ul>
+            <li>Steak or chicken slices with butter sauce</li>
+            <li>Avocado and boiled egg salad</li>
+            <li>Cottage cheese cube + handful of nuts (nut-free option available)</li>
+          </ul>
+        </div>
+        <button class="select-btn" onclick="selectMeal('Keto Meal')">Select</button>
+      </div>
+      
+      <div class="meal-item">
+        <h3 class="meal-title">Cholesterol-Free Meal</h3>
+        <div class="meal-desc">
+          <ul>
+            <li>Light vegetable soup</li>
+            <li>Mixed fruit plate</li>
+            <li>Arugula salad (no oil)</li>
+          </ul>
+        </div>
+        <button class="select-btn" onclick="selectMeal('Cholesterol-Free Meal')">Select</button>
+      </div>
+    </div>
+
+    <div class="order-summary">
+      <h3>Your Selected Meal</h3>
+      <div id="selectedMeal">
+        <p>No meal selected yet</p>
+      </div>
+      <div id="confirmationMessage" class="hidden">
+        <p>Your special meal request has been submitted successfully!</p>
+        <p>We'll prepare your meal according to your dietary requirements.</p>
+      </div>
+      <button id="submitBtn" class="book-btn" style="margin-top: 15px;" onclick="submitOrder()">Confirm Special Meal</button>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-links">
+      <a href="about.html">About</a> | <a href="services.html">Services</a> | <a href="contact.html">Contact</a>
+    </div>
+    <p>© 2025 Remaya Air. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById("sideMenu").classList.toggle("active");
+    }
+
+    function filterMeals() {
+      const selectedCategory = document.getElementById("dietType").value;
+      const categories = document.querySelectorAll(".meal-category");
+      
+      categories.forEach(category => {
+        if (selectedCategory === "all" || category.dataset.category === selectedCategory) {
+          category.style.display = "block";
+        } else {
+          category.style.display = "none";
+        }
+      });
+    }
+
+    function selectMeal(mealName) {
+      const selectedMealDiv = document.getElementById("selectedMeal");
+      selectedMealDiv.innerHTML = `<p><strong>${mealName}</strong></p>`;
+      document.getElementById("submitBtn").disabled = false;
+
+      // Save the selected meal to localStorage
+      localStorage.setItem('selectedMeal', mealName);
+    }
+
+    function submitOrder() {
+      const selectedMeal = document.getElementById("selectedMeal").textContent;
+      if (selectedMeal.includes("No meal")) {
+        alert("Please select a meal first");
+        return;
+      }
+      
+      document.getElementById("confirmationMessage").classList.remove("hidden");
+      document.getElementById("submitBtn").disabled = true;
+
+      // Save the confirmed meal in localStorage
+      localStorage.setItem('confirmedMeal', selectedMeal);
+
+      // In a real application, you would send this data to the server
+      console.log("Meal ordered:", selectedMeal);
+    }
+
+    // Initialize with all meals visible
+    filterMeals();
+
+    // Load the previously selected meal from localStorage if available
+    window.onload = function() {
+      const savedMeal = localStorage.getItem('selectedMeal');
+      if (savedMeal) {
+        const selectedMealDiv = document.getElementById("selectedMeal");
+        selectedMealDiv.innerHTML = `<p><strong>${savedMeal}</strong></p>`;
+        document.getElementById("submitBtn").disabled = false;
+      }
+    };
+</script>
+
+</body>
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="auth.js"></script>
+  <meta charset="UTF-8">
+  <title>Select Destination Country</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      overflow-x: hidden;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .scroll-container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      box-sizing: border-box;
+      min-height: 100vh;
+    }
+    
+    .country-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+    
+    .country-box {
+      width: 200px;
+      cursor: pointer;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      overflow: hidden;
+      text-align: center;
+      background-color: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+    
+    .country-box:hover {
+      transform: scale(1.05);
+    }
+    
+    .country-box img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+    }
+    
+    .city-container {
+      display: none;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.5s;
+      width: 100%;
+    }
+    
+    .city-box {
+      width: 180px;
+      text-align: center;
+      cursor: pointer;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 10px;
+      background-color: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+    
+    .city-box:hover {
+      transform: scale(1.05);
+    }
+    
+    .city-box img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    
+    .back-button {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    
+    .back-button:hover {
+      background-color: #0056b3;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background-color: #f8f9fa;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .logo {
+      height: 50px;
+    }
+    
+    .site-name {
+      margin: 0;
+      font-size: 24px;
+    }
+    
+    .language-btn, .menu-btn {
+      padding: 8px 15px;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="home-en.html">
+      <img src="logo.png" alt="Remaya Air Logo" class="logo">
+    </a>
+    <h1 class="site-name">Remaya Air</h1>
+    <nav>
+   
+      <div class="menu-btn" onclick="toggleMenu()">☰</div>
+    </nav>
+  </header>
+
+  <div class="scroll-container">
+    <h1 style="text-align: center; margin: 20px 0;">Select a Country</h1>
+    
+    <div id="countrySection" class="country-container">
+      <!-- Countries with images -->
+      <div class="country-box" onclick="showCities('saudi')">
+        <img src="saudi-arabia.jpg" alt="Saudi Arabia">
+        <h3>Saudi Arabia</h3>
+      </div>
+      <div class="country-box" onclick="showCities('uae')">
+        <img src="uae.jpg" alt="UAE">
+        <h3>United Arab Emirates</h3>
+      </div>
+      <div class="country-box" onclick="showCities('uk')">
+        <img src="uk.jpg" alt="United Kingdom">
+        <h3>United Kingdom</h3>
+      </div>
+      <div class="country-box" onclick="showCities('italy')">
+        <img src="italy.jpg" alt="Italy">
+        <h3>Italy</h3>
+      </div>
+      <div class="country-box" onclick="showCities('malaysia')">
+        <img src="malaysia.jpg" alt="Malaysia">
+        <h3>Malaysia</h3>
+      </div>
+      <div class="country-box" onclick="showCities('france')">
+        <img src="france.jpg" alt="France">
+        <h3>France</h3>
+      </div>
+      <div class="country-box" onclick="showCities('spain')">
+        <img src="spain.jpg" alt="Spain">
+        <h3>Spain</h3>
+      </div>
+      <div class="country-box" onclick="showCities('japan')">
+        <img src="japan.jpg" alt="Japan">
+        <h3>Japan</h3>
+      </div>
+      <div class="country-box" onclick="showCities('thailand')">
+        <img src="thailand.jpg" alt="Thailand">
+        <h3>Thailand</h3>
+      </div>
+      <div class="country-box" onclick="showCities('korea')">
+        <img src="korea.jpg" alt="South Korea">
+        <h3>South Korea</h3>
+      </div>
+      <div class="country-box" onclick="showCities('usa')">
+        <img src="usa.jpg" alt="United States">
+        <h3>United States</h3>
+      </div>
+      <div class="country-box" onclick="showCities('germany')">
+        <img src="germany.jpg" alt="Germany">
+        <h3>Germany</h3>
+      </div>
+    </div>
+
+    <div id="citySection" class="city-container">
+      <button class="back-button" onclick="showCountries()">← Back to Countries</button>
+      <div id="citiesGrid" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; width: 100%;"></div>
+    </div>
+  </div>
+
+  <script>
+    const citiesData = {
+      saudi: [
+        { name: "Riyadh", image: "riyadh.jpg" },
+        { name: "Jeddah", image: "jeddah.jpg" }
+      ],
+      uae: [
+        { name: "Dubai", image: "dubai.jpg" },
+        { name: "Abu Dhabi", image: "abudhabi.jpg" }
+      ],
+      uk: [
+        { name: "London", image: "london.jpg" },
+        { name: "Manchester", image: "manchester.jpg" }
+      ],
+      italy: [
+        { name: "Rome", image: "rome.jpg" },
+        { name: "Milan", image: "milan.jpg" }
+      ],
+      malaysia: [
+        { name: "Kuala Lumpur", image: "kualalumpur.jpg" },
+        { name: "Penang", image: "penang.jpg" }
+      ],
+      france: [
+        { name: "Paris", image: "paris.jpg" },
+        { name: "Nice", image: "nice.jpg" }
+      ],
+      spain: [
+        { name: "Barcelona", image: "barcelona.jpg" },
+        { name: "Madrid", image: "madrid.jpg" }
+      ],
+      japan: [
+        { name: "Tokyo", image: "tokyo.jpg" },
+        { name: "Osaka", image: "osaka.jpg" }
+      ],
+      thailand: [
+        { name: "Bangkok", image: "bangkok.jpg" },
+        { name: "Phuket", image: "phuket.jpg" }
+      ],
+      korea: [
+        { name: "Seoul", image: "seoul.jpg" },
+        { name: "Busan", image: "busan.jpg" }
+      ],
+      usa: [
+        { name: "New York", image: "newyork.jpg" },
+        { name: "Los Angeles", image: "losangeles.jpg" }
+      ],
+      germany: [
+        { name: "Berlin", image: "berlin.jpg" },
+        { name: "Munich", image: "munich.jpg" }
+      ]
+    };
+
+    function showCities(countryKey) {
+      const countrySection = document.getElementById("countrySection");
+      const citySection = document.getElementById("citySection");
+      const citiesGrid = document.getElementById("citiesGrid");
+     // Hide countries and show cities
+countrySection.style.display = "none";
+citySection.style.display = "flex";
+citiesGrid.innerHTML = "";
+
+const cities = citiesData[countryKey];
+
+cities.forEach(city => {
+  const box = document.createElement("div");
+  box.className = "city-box";
+  box.innerHTML = `
+    <img src="${city.image}" alt="${city.name}">
+    <p>${city.name}</p>
+  `;
+  box.onclick = () => {
+    window.location.href = `booking.html?city=${encodeURIComponent(city.name)}&country=${encodeURIComponent(countryKey)}`;
+  };
+  citiesGrid.appendChild(box);  // This line was missing
+});  // This closing bracket and parenthesis were missing
+
+function showCountries() {
+  const countrySection = document.getElementById("countrySection");
+  const citySection = document.getElementById("citySection");
+  
+  // Show countries and hide cities
+  countrySection.style.display = "flex";
+  citySection.style.display = "none";
+}
+    }
+    
+    function showCountries() {
+      const countrySection = document.getElementById("countrySection");
+      const citySection = document.getElementById("citySection");
+      
+      // Show countries and hide cities
+      countrySection.style.display = "flex";
+      citySection.style.display = "none";
+    }
+  </script>
+</body>
+</html>
